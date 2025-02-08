@@ -7,7 +7,6 @@ from mpi4py import MPI
 import numpy as np
 from torch.utils.data import DataLoader, Dataset
 
-
 def load_data(
     *,
     data_dir,

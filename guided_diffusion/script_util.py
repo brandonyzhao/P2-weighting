@@ -5,7 +5,7 @@ from . import gaussian_diffusion as gd
 from .respace import SpacedDiffusion, space_timesteps
 from .unet import SuperResModel, UNetModel, EncoderUNetModel
 
-NUM_CLASSES = 1000
+NUM_CLASSES = 20
 
 
 def diffusion_defaults():
@@ -51,6 +51,7 @@ def model_and_diffusion_defaults():
         num_heads=4,
         num_heads_upsample=-1,
         num_head_channels=-1,
+        num_img_channels=3,
         attention_resolutions="16,8",
         channel_mult="",
         dropout=0.0,
@@ -82,6 +83,7 @@ def create_model_and_diffusion(
     channel_mult,
     num_heads,
     num_head_channels,
+    num_img_channels,
     num_heads_upsample,
     attention_resolutions,
     dropout,
@@ -111,6 +113,7 @@ def create_model_and_diffusion(
         attention_resolutions=attention_resolutions,
         num_heads=num_heads,
         num_head_channels=num_head_channels,
+        num_img_channels=num_img_channels,
         num_heads_upsample=num_heads_upsample,
         use_scale_shift_norm=use_scale_shift_norm,
         dropout=dropout,
@@ -144,6 +147,7 @@ def create_model(
     attention_resolutions="16",
     num_heads=1,
     num_head_channels=-1,
+    num_img_channels=3,
     num_heads_upsample=-1,
     use_scale_shift_norm=False,
     dropout=0,
@@ -171,9 +175,9 @@ def create_model(
 
     return UNetModel(
         image_size=image_size,
-        in_channels=3,
+        in_channels=num_img_channels,
         model_channels=num_channels,
-        out_channels=(3 if not learn_sigma else 6),
+        out_channels=(num_img_channels if not learn_sigma else num_img_channels*2),
         num_res_blocks=num_res_blocks,
         attention_resolutions=tuple(attention_ds),
         dropout=dropout,
